@@ -1,4 +1,4 @@
-"""TODO Missing docstring."""
+"""Helper functions for geeservermap."""
 
 
 def visparamsStrToList(params):

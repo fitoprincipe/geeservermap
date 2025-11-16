@@ -1,11 +1,11 @@
-"""TODO Missing docstring."""
+"""Custom exceptions for geeservermap."""
 
 
 class ServerNotRunning(Exception):
-    """TODO Missing docstring."""
+    """Exception raised when the server is not running."""
 
     def __init__(self, port):
-        """TODO Missing docstring."""
+        """Initialize the exception with the port number."""
         self.message = f"""The server is not running or it isn't running on port {port}. To run the
 server follow instructions on <link>. If the server is running in a
 different port, you must specify it when creating the Map instance:

@@ -1,5 +1,5 @@
 # coding=utf-8
-"""TODO Missing docstring."""
+"""GEE Server Map package."""
 
 from . import helpers as helpers
 from .elements import layers as layers

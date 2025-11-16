@@ -1,4 +1,4 @@
-"""TODO Missing docstring."""
+"""Layer elements for GEE Server Map."""
 
 from typing import Union
 
@@ -20,7 +20,7 @@ class VisParams:
         bias=None,
         gamma=None,
     ):
-        """TODO Missing docstring."""
+        """Initialize visualization parameters."""
         # Bands
         self.bands = self.__format_bands(bands)
         self._bands_len = len(self.bands)
@@ -39,7 +39,7 @@ class VisParams:
 
     @staticmethod
     def __format_bands(bands):
-        """TODO Missing docstring."""
+        """Format bands list."""
         if isinstance(bands, str):
             bands = [bands]
         if len(bands) < 3:
@@ -49,7 +49,7 @@ class VisParams:
         return bands
 
     def __format_param(self, value, param):
-        """TODO Missing docstring."""
+        """Format parameter value."""
         if isinstance(value, (int, float)):
             return [value] * self._bands_len
         elif isinstance(value, str):
@@ -68,7 +68,7 @@ class VisParams:
 
     @classmethod
     def from_image(cls, image, visParams=None):
-        """TODO Missing docstring."""
+        """Create visualization parameters from an image."""
         visParams = visParams or {}
         if "bands" not in visParams:
             bands = image.bandNames().getInfo()
@@ -109,7 +109,7 @@ class VisParams:
 
 
 class MapLayer:
-    """TODO Missing docstring."""
+    """Map layer representation for GEE Server Map."""
 
     ATTR = (
         'Map Data &copy; <a href="https://earthengine.google.com/">'
@@ -117,7 +117,7 @@ class MapLayer:
     )
 
     def __init__(self, url, opacity, visible, attribution=ATTR):
-        """TODO Missing docstring."""
+        """Initialize the MapLayer instance."""
         self.url = url
         if opacity > 1:
             print("opacity cannot be greater than 1, setting to 1")
@@ -140,10 +140,10 @@ class MapLayer:
 
 
 class Image:
-    """TODO Missing docstring."""
+    """Image representation for GEE Server Map."""
 
     def __init__(self, image: ee.Image, visParams: VisParams):
-        """TODO Missing docstring."""
+        """Initialize the Image instance."""
         self.image = image
         self.visParams = visParams
 
@@ -175,12 +175,12 @@ class Image:
 
 
 class Geometry:
-    """TODO Missing docstring."""
+    """Geometry representation for GEE Server Map."""
 
     def __init__(self, geometry: ee.Geometry):
-        """TODO Missing docstring."""
+        """Initialize the Geometry instance."""
         self.geometry = geometry
 
     def layer(self, opacity=1, visible=True):
-        """TODO Missing docstring."""
+        """Layer for adding to map."""
         pass

@@ -1,4 +1,4 @@
-"""TODO Missing docstring."""
+"""This module contains the main function to run the geeservermap Flask app."""
 
 # from dotenv import load_dotenv
 import argparse
@@ -39,7 +39,7 @@ def register_map(width, height):
 
 @app.route("/add_layer", methods=["GET"])
 def add_layer():
-    """TODO Missing docstring."""
+    """Endpoint to add a layer to the map."""
     url = request.args.get("url", type=str)
     name = request.args.get("name", type=str)
     visible = request.args.get("visible", type=bool)
@@ -53,19 +53,19 @@ def add_layer():
 
 @app.route("/get_message", methods=["GET"])
 def get_message():
-    """TODO Missing docstring."""
+    """Endpoint to retrieve a message by its job ID."""
     job_id = request.args.get("id", type=str)
     return MESSAGES.get(job_id)
 
 
 @app.route("/messages")
 def messages():
-    """TODO Missing docstring."""
+    """Endpoint to retrieve all messages."""
     return jsonify(MESSAGES)
 
 
 def run():
-    """TODO Missing docstring."""
+    """Run the Flask app."""
     args = parser.parse_args()
     port = args.port
     register_map(width=args.width, height=args.height)

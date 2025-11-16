@@ -1,5 +1,5 @@
 # coding=utf-8
-"""TODO Missing docstring."""
+"""Map module for GEE Server Map."""
 
 import ee
 import requests
@@ -10,10 +10,10 @@ from .main import PORT
 
 
 class Map:
-    """TODO Missing docstring."""
+    """Map class for managing layers in GEE Server Map."""
 
     def __init__(self, port=PORT, do_async=False):
-        """TODO Missing docstring."""
+        """Initialize the Map instance."""
         self.port = port
         self.do_async = do_async
 

@@ -5,6 +5,7 @@ import argparse
 import uuid
 
 from flask import Flask, jsonify, render_template, request
+from flask_socketio import SocketIO, emit
 
 MESSAGES = {}
 
@@ -27,14 +28,21 @@ parser.add_argument(
 )
 
 app = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins='*')  # uses eventlet/gevent if installed
 
 
-def register_map(width, height):
+@socketio.on('connect')
+def _on_connect():
+    """Handle a new client connection."""
+    print('Client connected:', request.sid)
+
+
+def register_map(width, height, port=PORT):
     """Register the index endpoint, allowing the user to pass a height and width."""
 
     @app.route("/")
     def map():
-        return render_template("map.html", width=width, height=height)
+        return render_template("map.html", width=width, height=height, port=port)
 
 
 @app.route("/add_layer", methods=["GET"])
@@ -46,8 +54,13 @@ def add_layer():
     opacity = request.args.get("opacity", type=float)
     layer = {"url": url, "name": name, "visible": visible, "opacity": opacity}
     job_id = uuid.uuid4().hex
-    print(job_id)
     MESSAGES[job_id] = layer
+    # broadcast full state to all connected websocket clients
+    try:
+        socketio.emit("messages", MESSAGES)
+    except Exception as exc:
+        print("socketio emit error:", exc)
+
     return jsonify({"job_id": job_id})
 
 
@@ -55,7 +68,7 @@ def add_layer():
 def get_message():
     """Endpoint to retrieve a message by its job ID."""
     job_id = request.args.get("id", type=str)
-    return MESSAGES.get(job_id)
+    return jsonify(MESSAGES.get(job_id))
 
 
 @app.route("/messages")
@@ -68,6 +81,5 @@ def run():
     """Run the Flask app."""
     args = parser.parse_args()
     port = args.port
-    register_map(width=args.width, height=args.height)
-    # webbrowser.open(f'http://localhost:{port}')
-    app.run(debug=True, port=port)
+    register_map(width=args.width, height=args.height, port=port)
+    socketio.run(app, debug=True, port=port)

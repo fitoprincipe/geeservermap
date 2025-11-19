@@ -28,7 +28,8 @@ dependencies = [
   "requests",
   "brotli",
   "earthengine-api",
-  "deprecated>=1.2.14"
+  "deprecated>=1.2.14",
+  "flask_socketio"
 ]
 
 [[project.authors]]

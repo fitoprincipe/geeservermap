@@ -2,7 +2,7 @@
 height: {{ height }}px; padding: 0px; margin: 0px; } {% endblock mapcss %} {%
 block map %}
 <div id="map"></div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
 <script>
   var messages = {};
 
@@ -70,6 +70,7 @@ block map %}
         var layer = L.tileLayer(url, { attribution: "testing" });
         layer.setOpacity(op);
         layer.addTo(map);
+        console.log("Layer added:", name, url, layer);
         overlays[name] = layer;
         LayersControl.addOverlay(layer, name);
       }
@@ -79,10 +80,19 @@ block map %}
     }
   }
 
-  function checkStatus() {
-    jQuery.getJSON("/messages", {}, handleData, handleError);
-  }
+  // --- WebSocket (Socket.IO) transport ---
+  var socket = io(); // connects to server at same origin
 
-  setInterval(checkStatus, 1000);
+  socket.on('connect', function() {
+    console.log('socket connected', socket.id);
+  });
+
+  // server sends the full messages dict
+  socket.on('messages', function(data) {
+    console.log("Received messages event:", data);
+    try { handleData(data); }
+    catch (e) { console.error('handleData error', e); }
+  });
+
 </script>
 {% endblock map %}
